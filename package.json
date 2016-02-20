@@ -1,14 +1,17 @@
 {
   "name": "atom-sticky-cursor",
   "main": "./lib/atom-sticky-cursor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sticks cursor to beginning/end of line when moving up/down",
   "keywords": [
     "navigation",
     "productivity"
   ],
   "activationCommands": {
-    "atom-text-editor": ["sticky-cursor:move-up", "sticky-cursor:move-down"]
+    "atom-text-editor": [
+      "sticky-cursor:move-up",
+      "sticky-cursor:move-down"
+    ]
   },
   "repository": "https://github.com/pvorona/atom-sticky-cursor",
   "license": "MIT",
