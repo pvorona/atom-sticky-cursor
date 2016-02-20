@@ -7,8 +7,7 @@ sticky = (action) ->
     eol = cursor.isAtEndOfLine()
     bol = emptyRe.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
     action cursor
-    return if empty
-    if eol
+    if eol and not empty
       cursor.moveToEndOfLine()
     else if bol
       cursor.moveToBeginningOfLine()
