@@ -11,7 +11,7 @@ sticky = (action) ->
       cursor.moveToEndOfLine()
     else if bol
       cursor.moveToBeginningOfLine()
-      cursor.moveToNextWordBoundary() if cursor.isSurroundedByWhitespace()
+      cursor.moveToNextSubwordBoundary() if cursor.isSurroundedByWhitespace()
 
 commands =
   'sticky-cursor:move-up':
