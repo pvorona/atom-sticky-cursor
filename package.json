@@ -1,7 +1,7 @@
 {
   "name": "atom-sticky-cursor",
   "main": "./lib/atom-sticky-cursor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Sticks cursor to beginning/end of line when moving up/down",
   "keywords": [
     "navigation",
