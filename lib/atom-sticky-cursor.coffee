@@ -1,23 +1,45 @@
 {CompositeDisposable} = require 'atom'
 
-sticky = (action) ->
-  emptyRe = /^\s*$/
-  atom.workspace.getActiveTextEditor().getCursors().forEach (cursor) ->
-    empty = emptyRe.test cursor.getCurrentBufferLine()
-    eol = cursor.isAtEndOfLine()
-    bol = emptyRe.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
-    action cursor
-    if eol and not empty
-      cursor.moveToEndOfLine()
-    else if bol
-      cursor.moveToBeginningOfLine()
-      cursor.moveToNextSubwordBoundary() if cursor.isSurroundedByWhitespace()
+isEmpty = /^\s*$/
+state = 'bol'
+
+withActiveEditor = (action) ->
+  action atom.workspace.getActiveTextEditor()
+
+withAllCursors = (action) -> (editor) ->
+  editor.getCursors().forEach action
+
+currentState = (cursor) ->
+  return 'empty' if isEmpty.test cursor.getCurrentBufferLine()
+  return 'eol'   if cursor.isAtEndOfLine()
+  return 'bol'   if isEmpty.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
+  return 'normal'
+
+setState = (newState) ->
+  state = newState unless newState is 'empty'
+
+onEol = (cursor) ->
+  cursor.moveToEndOfLine()
+
+onBol = (cursor) ->
+  cursor.moveToBeginningOfLine()
+  cursor.moveToNextSubwordBoundary() if cursor.isSurroundedByWhitespace()
+
+place = (cursor) ->
+  switch state
+    when 'eol' then onEol cursor
+    when 'bol' then onBol cursor
+
+sticky = (action) -> (cursor) ->
+  setState currentState cursor
+  action cursor
+  place cursor
 
 commands =
   'sticky-cursor:move-up':
-    sticky.bind this, (cursor) -> cursor.moveUp()
+    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveUp()
   'sticky-cursor:move-down':
-    sticky.bind this, (cursor) -> cursor.moveDown()
+    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveDown()
 
 module.exports =
   activate: ->
