@@ -10,7 +10,11 @@
   "activationCommands": {
     "atom-text-editor": [
       "sticky-cursor:move-up",
-      "sticky-cursor:move-down"
+      "sticky-cursor:move-up-by-3",
+      "sticky-cursor:move-down",
+      "sticky-cursor:move-down-by-3",
+      "sticky-cursor:move-left",
+      "sticky-cursor:move-right"
     ]
   },
   "repository": "https://github.com/pvorona/atom-sticky-cursor",

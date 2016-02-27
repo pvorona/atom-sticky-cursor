@@ -55,6 +55,10 @@ commands =
     withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveUp()
   'sticky-cursor:move-down':
     withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveDown()
+  'sticky-cursor:move-up-by-3':
+    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveUp(3)
+  'sticky-cursor:move-down-by-3':
+    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveDown(3)
   'sticky-cursor:move-left':
     withActiveEditor.bind this, withAllCursors skippingIndentationLeft (cursor) -> cursor.moveLeft()
   'sticky-cursor:move-right':
