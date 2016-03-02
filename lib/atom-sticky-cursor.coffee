@@ -44,7 +44,7 @@ moveToBonl = (cursor) ->
 
 skippingIndentationLeft = (action) -> (cursor) ->
   action cursor
-  if isEmpty.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn() then moveToEopl cursor
+  moveToEopl cursor if isEmpty.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn() + 1
 
 skippingIndentationRight = (action) -> (cursor) ->
   action cursor
