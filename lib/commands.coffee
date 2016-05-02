@@ -1,4 +1,6 @@
-{withActiveEditor, withAllCursors, sticky, skippingIndentationLeft, skippingIndentationRight} = require  './atom-sticky-cursor'
+{sticky} = require  './vertical'
+{skippingIndentationLeft, skippingIndentationRight} = require  './horizontal'
+{withActiveEditor, withAllCursors} = require './utils'
 
 commands =
   'sticky-cursor:move-up'       : () -> withActiveEditor withAllCursors sticky (cursor) -> cursor.moveUp()
