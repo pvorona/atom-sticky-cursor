@@ -1,6 +1,6 @@
 {
   "name": "atom-sticky-cursor",
-  "main": "./lib/atom-sticky-cursor",
+  "main": "./lib/package",
   "version": "0.0.8",
   "description": "Sticks cursor to beginning/end of line when moving up/down",
   "keywords": [

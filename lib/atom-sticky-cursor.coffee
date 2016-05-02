@@ -1,6 +1,4 @@
-{CompositeDisposable} = require 'atom'
-
-isEmpty = /^\s*$/
+emptyRe = /^\s*$/
 state = 'bol'
 
 withActiveEditor = (action) ->
@@ -9,10 +7,13 @@ withActiveEditor = (action) ->
 withAllCursors = (action) -> (editor) ->
   editor.getCursors().forEach action
 
+isEmpty = (string) ->
+  emptyRe.test string
+
 currentState = (cursor) ->
-  return 'empty' if isEmpty.test cursor.getCurrentBufferLine()
+  return 'empty' if isEmpty cursor.getCurrentBufferLine()
   return 'eol'   if cursor.isAtEndOfLine()
-  return 'bol'   if isEmpty.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
+  return 'bol'   if isEmpty cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
   return 'normal'
 
 setState = (newState) ->
@@ -44,30 +45,16 @@ moveToBonl = (cursor) ->
 
 skippingIndentationLeft = (action) -> (cursor) ->
   action cursor
-  moveToEopl cursor if isEmpty.test cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn() + 1
+  moveToEopl cursor if isEmpty cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn() + 1
 
 skippingIndentationRight = (action) -> (cursor) ->
   action cursor
   moveToBonl cursor if cursor.isAtBeginningOfLine()
 
-commands =
-  'sticky-cursor:move-up':
-    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveUp()
-  'sticky-cursor:move-down':
-    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveDown()
-  'sticky-cursor:move-up-by-3':
-    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveUp(3)
-  'sticky-cursor:move-down-by-3':
-    withActiveEditor.bind this, withAllCursors sticky (cursor) -> cursor.moveDown(3)
-  'sticky-cursor:move-left':
-    withActiveEditor.bind this, withAllCursors skippingIndentationLeft (cursor) -> cursor.moveLeft()
-  'sticky-cursor:move-right':
-    withActiveEditor.bind this, withAllCursors skippingIndentationRight (cursor) -> cursor.moveRight()
-
-module.exports =
-  activate: ->
-    @subscriptions = new CompositeDisposable
-    @subscriptions.add atom.commands.add 'atom-text-editor', commands
-
-  deactivate: ->
-    @subscriptions.dispose()
+module.exports = {
+  withActiveEditor,
+  withAllCursors,
+  sticky,
+  skippingIndentationLeft,
+  skippingIndentationRight
+}
