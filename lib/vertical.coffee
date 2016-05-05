@@ -1,29 +1,28 @@
-{isEmpty, moveToEndOnLine, moveToBeginningOfFirstWord} = require './utils'
+{isEmpty, moveToEndOnLine, moveToBeginningOfFirstWord, isEndOfString, nothing} = require './utils'
 
-empty           = 'empty'
-endOfLine       = 'eol'
-beginningOfLine = 'bol'
-normal          = 'normal'
+positionings =
+  endOfLine            : 'endOfLine'
+  beginningOfFirstWord : 'beginningOfFirstWord'
+  normal               : 'normal'
 
-positioning = beginningOfLine
+positioning = positionings.beginningOfFirstWord
 
-calculateCurrentPositioning = (cursor) ->
-  return empty if isEmpty cursor.getCurrentBufferLine()
-  return endOfLine if cursor.isAtEndOfLine()
-  return beginningOfLine if isEmpty cursor.getCurrentBufferLine().slice 0, cursor.getBufferColumn()
-  return normal
+calculatePositioning = (line, column) ->
+  return positionings.endOfLine            if isEndOfString line, column
+  return positionings.beginningOfFirstWord if isEmpty line.slice 0, column
+  return positionings.normal
 
-setPositioning = (newPositioning) ->
-  positioning = newPositioning unless newPositioning is empty
-
-setPosition = (cursor) ->
+getBehavior = (positioning) ->
   switch positioning
-    when endOfLine then moveToEndOnLine cursor
-    when beginningOfLine then moveToBeginningOfFirstWord cursor
+    when positionings.endOfLine            then moveToEndOnLine
+    when positionings.beginningOfFirstWord then moveToBeginningOfFirstWord
+    when positionings.normal               then nothing
 
-sticky = (action) -> (cursor) ->
-  setPositioning calculateCurrentPositioning cursor
-  action cursor
-  setPosition cursor
+sticky = (sideEffect) -> (cursor) ->
+  line = cursor.getCurrentBufferLine()
+  if not isEmpty line
+    positioning = calculatePositioning line, cursor.getBufferColumn()
+  sideEffect cursor
+  getBehavior(positioning)(cursor)
 
-module.exports = {sticky}
+module.exports = {sticky, positionings, calculatePositioning}
