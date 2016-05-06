@@ -1,14 +1,13 @@
-{positionings, calculatePositioning} = require '../lib/vertical'
+{positionings, calculatePositioning} = require '../lib/movement-vertical'
 
-describe "vertical", ->
+describe "movement-vertical", ->
   describe "positionings", ->
     it 'contains expected positionings', ->
-      expectedPositonings = [
+      [
         'endOfLine'
         'beginningOfFirstWord'
         'normal'
-      ]
-      expectedPositonings.forEach (positioning) -> expect(positionings[positioning]).toBeDefined()
+      ].forEach (positioning) -> expect(positionings[positioning]).toBeDefined()
 
   describe "calculatePositioning", ->
     it 'returns positionings.endOfLine for end of line', ->
@@ -17,4 +16,3 @@ describe "vertical", ->
       expect(calculatePositioning ' a', 1).toBe positionings.beginningOfFirstWord
     it 'returns positionings.normal for general case', ->
       expect(calculatePositioning ' aa ', 2).toBe positionings.normal
-

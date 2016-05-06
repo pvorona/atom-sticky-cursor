@@ -1,4 +1,4 @@
-{sticky} = require  './vertical'
+{sticky} = require  './movement-vertical'
 {skippingIndentationLeft, skippingIndentationRight} = require  './horizontal'
 {withActiveEditor, withAllCursors} = require './utils'
 
