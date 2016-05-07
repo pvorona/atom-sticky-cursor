@@ -1,4 +1,5 @@
-{positionings, calculatePositioning} = require '../lib/movement-vertical'
+{getBehavior, positionings, calculatePositioning, getPositioning, setPositioning} = require '../lib/movement-vertical'
+{nothing, moveToBeginningOfFirstWord, moveToEndOnLine} = require '../lib/utils'
 
 describe "movement-vertical", ->
   describe "positionings", ->
@@ -16,3 +17,22 @@ describe "movement-vertical", ->
       expect(calculatePositioning ' a', 1).toBe positionings.beginningOfFirstWord
     it 'returns positionings.normal for general case', ->
       expect(calculatePositioning ' aa ', 2).toBe positionings.normal
+
+  describe "getPositioning", ->
+    it 'returns on of expected positionings', ->
+      expect(getPositioning()).toBe(positionings.beginningOfFirstWord)
+
+  describe "setPositioning", ->
+    it 'changes positioning', ->
+      setPositioning positionings.normal
+      expect(getPositioning()).toBe(positionings.normal)
+
+  describe "getBehavior", ->
+    it 'returns moveToEndOnLine for positionings.endOfLine', ->
+      expect(getBehavior(positionings.endOfLine)).toBe(moveToEndOnLine)
+
+    it 'returns moveToBeginningOfFirstWord for positionings.beginningOfFirstWord', ->
+      expect(getBehavior(positionings.beginningOfFirstWord)).toBe(moveToBeginningOfFirstWord)
+
+    it 'returns nothing for positionings.normal', ->
+      expect(getBehavior(positionings.normal)).toBe(nothing)

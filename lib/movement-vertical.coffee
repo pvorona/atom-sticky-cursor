@@ -1,4 +1,5 @@
-{isEmpty, moveToEndOnLine, moveToBeginningOfFirstWord, isEndOfString, nothing, executeAround, lazy} = require './utils'
+{isEmpty, moveToEndOnLine, moveToBeginningOfFirstWord, isEndOfString, nothing,
+  executeAround, lazy} = require './utils'
 
 positionings =
   endOfLine            : 'endOfLine'
@@ -6,6 +7,12 @@ positionings =
   normal               : 'normal'
 
 positioning = positionings.beginningOfFirstWord
+
+getPositioning = () ->
+  positioning
+
+setPositioning = (newPositioning) ->
+  positioning = newPositioning
 
 calculatePositioning = (line, column) ->
   return positionings.endOfLine            if isEndOfString line, column
@@ -18,15 +25,11 @@ getBehavior = (positioning) ->
     when positionings.beginningOfFirstWord then moveToBeginningOfFirstWord
     when positionings.normal               then nothing
 
-getPositioning = () ->
-  positioning
-
 before = (cursor) ->
   line = cursor.getCurrentBufferLine()
-  if not isEmpty line
-    positioning = calculatePositioning line, cursor.getBufferColumn()
+  setPositioning calculatePositioning line, cursor.getBufferColumn() unless isEmpty line
 
 sticky = (action) ->
   executeAround action, before, lazy getBehavior, getPositioning
 
-module.exports = {sticky, positionings, calculatePositioning}
+module.exports = {sticky, positionings, calculatePositioning, getPositioning, setPositioning, getBehavior}
