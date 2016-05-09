@@ -1,4 +1,4 @@
-{getBehavior, positionings, calculatePositioning, getPositioning, setPositioning} = require '../lib/movement-vertical'
+{shouldSetPositioning, getBehavior, positionings, calculatePositioning, getPositioning, setPositioning} = require '../lib/movement-vertical'
 {nothing, moveToBeginningOfFirstWord, moveToEndOnLine} = require '../lib/utils'
 
 describe "movement-vertical", ->
@@ -36,3 +36,8 @@ describe "movement-vertical", ->
 
     it 'returns nothing for positionings.normal', ->
       expect(getBehavior(positionings.normal)).toBe(nothing)
+
+  describe "shouldSetPositioning", ->
+    it 'true only for non empty lines', ->
+      expect(shouldSetPositioning('')).toBe false
+      expect(shouldSetPositioning('a')).toBe true

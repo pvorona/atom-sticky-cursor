@@ -33,10 +33,20 @@ adviceAfter = (action, advice) ->
 executeAround = (action, before, after) ->
   adviceAfter adviceBefore(action, before), after
 
+sequence = (functions...) ->
+  (parameters...) ->
+    functions.forEach (fn) -> fn(parameters...)
+
 lazy = (action, lazyParams...) ->
   (params...) ->
     evaluatedParams = lazyParams.map (param) -> do param
     action(evaluatedParams...)?(params...)
 
+injecting = (action, params...) ->
+  () -> action params...
+
+applyConditionally = (action, predicate) ->
+  do action if do predicate
+
 module.exports = {withActiveEditor, withAllCursors, isEmpty, moveToEndOnLine, moveToBeginningOfFirstWord, isEndOfString,
-  nothing, adviceBefore, adviceAfter, executeAround, lazy}
+  nothing, adviceBefore, adviceAfter, executeAround, lazy, injecting, applyConditionally, sequence}

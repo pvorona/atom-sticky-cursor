@@ -1,4 +1,4 @@
-{isEmpty, isEndOfString, adviceBefore, adviceAfter, executeAround, lazy} = require '../lib/utils'
+{applyConditionally, isEmpty, isEndOfString, adviceBefore, adviceAfter, executeAround, lazy} = require '../lib/utils'
 
 describe "utils", ->
   describe "isEmpty", ->
@@ -109,3 +109,22 @@ describe "utils", ->
       do lazy action, getter
 
       expect(getter).toHaveBeenCalled()
+
+  describe "applyConditionally", ->
+    it 'calls method when condition is executed to true', ->
+      action = jasmine.createSpy('action')
+      predicate = -> true
+
+      applyConditionally action, predicate
+
+      expect(action).toHaveBeenCalled()
+
+    it 'doesnt call function when condition is executed to false', ->
+      action = jasmine.createSpy('action')
+      predicate = -> false
+
+      applyConditionally action, predicate
+
+      expect(action).not.toHaveBeenCalled()
+
+
